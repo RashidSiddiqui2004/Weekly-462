@@ -1,0 +1,51 @@
+class Solution {
+    using ll = long long;
+
+public:
+    long long maxTotal(vector<int>& val, vector<int>& l) {
+        queue<int> q;
+        int n = val.size();
+        ll ans = 0;
+        vector<pair<int, int>> v;
+        for (int i = 0; i < n; i++) {
+            v.push_back({l[i], val[i]});
+        }
+        sort(v.begin(), v.end(), [](pair<int, int>& p1, pair<int, int>& p2) {
+            if (p1.first == p2.first) {
+                return p1.second > p2.second;
+            }
+            return p1.first < p2.first;
+        });
+        int ptr = 0;
+        while (ptr < n) {
+            while (ptr < n) {
+                auto p = v[ptr];
+                auto limit = p.first, value = p.second;
+                if (q.size() >= limit) {
+                    ptr++;
+                } else {
+                    break;
+                }
+            }
+            while (!q.empty()) {
+                int s = q.size();
+                if (q.front() <= s) {
+                    q.pop();
+                } else {
+                    break;
+                }
+            }
+            if(ptr==n){
+                break;
+            }
+            auto p = v[ptr];
+            auto limit = p.first, value = p.second; 
+            if (q.size() < limit) {
+                ans += value;
+                q.push(limit);
+            }
+            ptr++;
+        }
+        return ans;
+    }
+};
